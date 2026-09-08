@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>深海听觉 · 潮汐交响</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono&family=Noto+Serif+SC:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
+*{box-sizing:border-box} body{margin:0;background:#030704;color:#f3f0df;overflow:hidden;font-family:'Noto Serif SC',serif} button{font:inherit;color:inherit}
+#app{height:100vh;position:relative;background:#040704;overflow:hidden}.grain{position:absolute;inset:-40%;opacity:.2;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");animation:grain .25s steps(2) infinite}@keyframes grain{to{transform:translate(3%,2%)}}
+.mast{position:absolute;z-index:5;left:25px;right:25px;top:22px;display:flex;justify-content:space-between;align-items:center;font:10px 'DM Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:#ddd9c5}.mast b{font-family:'Noto Serif SC';font-size:14px;letter-spacing:.2em}.mast span{opacity:.65}
+.screen{position:absolute;inset:0;display:grid;place-items:center;transition:opacity .75s ease,transform .75s ease}.screen.off{opacity:0;transform:scale(1.04);pointer-events:none}
+#start{z-index:2}.title{text-align:center;z-index:2}.title .the{display:block;font:italic 24px 'Playfair Display';margin-bottom:-4px}.title h1{margin:0;font:400 clamp(42px,7vw,93px)/.82 'Playfair Display';letter-spacing:-.065em;text-transform:uppercase}.title p{font:10px 'DM Mono';letter-spacing:.28em;margin:23px 0 0;color:#b2b7a9}.line{position:absolute;width:120vw;left:-10vw;top:55%;height:100px;overflow:hidden;opacity:.7}.line svg{width:100%;height:100%;fill:none;stroke:#bd9975;stroke-width:1.1;stroke-dasharray:3 3;animation:draw 8s linear infinite}@keyframes draw{to{stroke-dashoffset:-300}}
+.enter{z-index:3;position:absolute;bottom:10vh;border:1px solid rgba(237,231,204,.45);background:transparent;border-radius:100%;width:93px;height:93px;cursor:pointer;font:10px 'DM Mono';letter-spacing:.08em;transition:.35s}.enter:hover{background:#e7dfc3;color:#07100e;transform:scale(1.07)}.enter:after{content:'↓';display:block;font-size:18px;margin-top:3px}
+#dive{display:none;z-index:3;background:#03131b}.sea{position:absolute;inset:0;width:100%;height:100%;opacity:.98}.chapters{position:absolute;left:clamp(25px,7vw,105px);top:50%;transform:translateY(-50%);z-index:3}.chapters button{display:block;padding:0;border:0;background:none;color:#b2b4a6;cursor:pointer;font:clamp(24px,4vw,52px)/1.35 'Playfair Display';letter-spacing:-.05em;text-align:left;transition:.3s}.chapters button span{font:10px 'DM Mono';vertical-align:middle;margin-right:13px;letter-spacing:0;color:#a78467}.chapters button.active,.chapters button:hover{color:#faf5e2;transform:translateX(10px)}
+.chapter-content{position:absolute;right:clamp(22px,8vw,130px);top:50%;width:min(390px,43vw);transform:translateY(-50%);z-index:3;border-left:1px solid rgba(229,214,179,.4);padding-left:26px}.chapter-content small{font:10px 'DM Mono';letter-spacing:.2em;color:#d5a982}.chapter-content h2{font:400 clamp(28px,4vw,54px)/.98 'Playfair Display';margin:14px 0}.chapter-content p{font-size:14px;line-height:2;color:#e6e1cf;opacity:.9}.ting{position:absolute;bottom:4%;left:50%;transform:translateX(-50%);z-index:2;width:clamp(220px,28vw,360px);height:auto;max-height:60vh;object-fit:contain;background:transparent;filter:drop-shadow(0 24px 30px #000);animation:float 4s ease-in-out infinite}@keyframes float{50%{transform:translate(-50%,-17px) rotate(1deg)}}
+.finds{position:absolute;inset:0;z-index:4}.find{position:absolute;width:60px;height:60px;border:0;background:transparent;cursor:pointer;filter:drop-shadow(0 0 12px rgba(218,250,236,.88));animation:bob 3s ease-in-out infinite}.find:before{position:absolute;top:-19px;left:50%;transform:translateX(-50%);font:9px 'DM Mono';letter-spacing:.1em;color:#fff4d0;white-space:nowrap}.find:hover{filter:drop-shadow(0 0 20px #fff4bf);transform:scale(1.12)}.find[hidden]{display:none}.f0{left:37%;top:68%}.f1{left:62%;top:29%;animation-delay:-1s}.f2{left:74%;top:67%;animation-delay:-2s}.f3{left:31%;top:35%;animation-delay:-.6s}@keyframes bob{50%{margin-top:-15px}}.bottle-icon{margin:7px auto;width:31px;height:47px;border:3px solid #c9f2e8;border-radius:8px 8px 13px 13px;background:linear-gradient(90deg,rgba(21,128,158,.8),rgba(234,255,241,.5),rgba(21,128,158,.75));transform:rotate(18deg)}.bottle-icon:before{content:'';display:block;width:11px;height:13px;background:#d9c28d;border:2px solid #bceee6;margin:-15px auto}.shell-icon{margin:11px auto;width:50px;height:42px;border-radius:50px 50px 10px 10px;background:repeating-linear-gradient(75deg,#e8a578 0 5px,#ffdfad 6px 10px);border:2px solid #ffe5bd}.recipe-icon{margin:7px auto;width:39px;height:48px;background:#eee4c5;border:2px solid #9c7652;transform:rotate(-9deg)}.recipe-icon:after{content:'✦';font-size:22px;color:#a46c49}.record-icon{margin:6px auto;width:48px;height:48px;border-radius:50%;border:6px solid #af8460;background:radial-gradient(circle,#e8d6a9 0 3px,#2f2925 4px 10px,#171716 11px)}.f0:before{content:'漂流瓶'}.f1:before{content:'贝壳'}.f2:before{content:'食谱页'}.f3:before{content:'旧唱片'}
+.nav{position:absolute;z-index:6;bottom:25px;left:25px;right:25px;display:flex;justify-content:space-between;align-items:center;font:10px 'DM Mono';letter-spacing:.12em;color:#dfdac6}.nav div{display:flex;gap:8px}.nav i{width:24px;height:1px;background:#7b817b;display:block;cursor:pointer}.nav i.on{background:#f0ddad}.signal{position:absolute;right:4vw;bottom:10%;width:30vw;height:1px;background:rgba(255,255,255,.28);transform:rotate(-14deg);transform-origin:right}.signal:after{content:'';position:absolute;right:0;top:-2px;width:5px;height:5px;border-radius:50%;background:#f0d49a;box-shadow:0 0 18px 6px #d19f63}
+#artifact{display:none;z-index:10;background:rgba(1,7,9,.88);backdrop-filter:blur(13px)}#artifact.show{display:grid}.note{width:min(880px,94vw);text-align:center;border:1px solid rgba(226,213,182,.38);padding:18px;background:linear-gradient(135deg,rgba(26,50,52,.9),rgba(1,11,16,.94))}
+/* Scene image — must NEVER crop. Width fills the card up to a generous cap;
+   height is auto, so the original aspect ratio is preserved; max-height caps it. */
+/* Mini-Scene Extension — 3-angle rotatable diorama */
+.diorama{perspective:1400px;position:relative;margin:8px auto 14px;width:100%;max-width:640px;aspect-ratio:5/3;background:radial-gradient(ellipse at 50% 65%,#1b4651 0%,#02161c 75%);border-radius:6px;overflow:hidden;border:1px solid rgba(180,200,205,.18)}
+.diorama:before,.diorama:after{content:'';position:absolute;left:0;right:0;height:35%;pointer-events:none}
+.diorama:before{top:0;background:linear-gradient(180deg,rgba(0,0,0,.35),transparent)}
+.diorama:after{bottom:0;background:linear-gradient(0deg,rgba(0,0,0,.55),transparent)}
+.scene-stage{position:absolute;left:50%;top:50%;width:82%;height:84%;transform-style:preserve-3d;transform:translate(-50%,-50%);transition:transform .9s cubic-bezier(.45,0,.3,1)}
+.diorama[data-angle="0"] .scene-stage{transform:translate(-50%,-50%) rotateY(0deg) rotateX(0deg)}
+.diorama[data-angle="1"] .scene-stage{transform:translate(-50%,-50%) rotateY(-32deg) rotateX(2deg)}
+.diorama[data-angle="2"] .scene-stage{transform:translate(-50%,-50%) rotateX(33deg) rotateY(2deg)}
+.diorama-face{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:transparent;border:0;outline:0;box-shadow:none;filter:drop-shadow(0 18px 30px rgba(0,0,0,.6));transition:filter .8s ease}
+.diorama[data-angle="1"] .diorama-face{filter:drop-shadow(0 18px 30px rgba(0,0,0,.6)) brightness(.55) saturate(.85)}
+.diorama[data-angle="2"] .diorama-face{filter:drop-shadow(0 18px 30px rgba(0,0,0,.6)) brightness(.82) hue-rotate(-6deg)}
+.diorama-shadow{position:absolute;left:50%;bottom:5%;width:74%;height:14px;background:radial-gradient(ellipse,rgba(0,0,0,.55),transparent 70%);transform:translateX(-50%);filter:blur(5px);opacity:.65;transition:.8s}
+.diorama[data-angle="1"] .diorama-shadow{width:42%}
+.diorama[data-angle="2"] .diorama-shadow{width:90%;opacity:.35}
+.angles{display:flex;gap:8px;justify-content:center;margin:0 auto 14px;font:10px 'DM Mono',monospace;letter-spacing:.18em;color:#d8d2bd}
+.angles button{background:transparent;border:1px solid rgba(226,213,182,.55);color:#e7ddc4;padding:7px 14px 7px 26px;border-radius:99px;cursor:pointer;transition:.3s;text-transform:uppercase;position:relative}
+.angles button:before{content:'●';position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:7px;color:#d5a982}
+.angles button:hover,.angles button.on{background:#e7dfc3;color:#07100e}
+.angles button.on:before{color:#a35f2b}
+.hint{position:absolute;top:14px;left:50%;transform:translateX(-50%);z-index:2;font:9px 'DM Mono';letter-spacing:.22em;color:#cfe7e1;opacity:.55;text-transform:uppercase}
+
+/* Modules dock — three buttons revealed after all 4 collected */
+.modules{position:absolute;right:30px;top:60px;z-index:5;display:none;flex-direction:column;gap:12px;align-items:flex-end}
+.modules.on{display:flex;animation:fadeIn .6s ease}
+.modules .lab-btn{width:72px;height:72px;border-radius:50%;border:1px solid #d8cab0;background:rgba(2,12,16,.78);color:#f0ddad;font:9px 'DM Mono';cursor:pointer;display:grid;place-items:center;letter-spacing:.14em;text-align:center;line-height:1.2;animation:bob 3s ease-in-out infinite;backdrop-filter:blur(4px)}
+.modules .lab-btn:nth-child(2){animation-delay:.6s}
+.modules .lab-btn:nth-child(3){animation-delay:1.2s}
+.modules .lab-btn:hover{background:#e7dfc3;color:#07100e;transform:scale(1.08)}
+
+#expressPop,#sceneExtPop,#costumePop{display:none;z-index:12;background:rgba(1,7,9,.92);backdrop-filter:blur(13px)}
+#expressPop.show,#sceneExtPop.show,#costumePop.show{display:grid}
+.express-wrap,.scene-ext-wrap,.costume-wrap{width:min(1120px,96vw);max-height:94vh;overflow:auto;padding:32px 28px 28px;border:1px solid rgba(226,213,182,.4);background:linear-gradient(135deg,rgba(26,50,52,.92),rgba(1,11,16,.96));text-align:center;border-radius:8px;box-shadow:0 22px 60px #000}
+.express-wrap header small,.scene-ext-wrap header small,.costume-wrap header small{font:10px 'DM Mono';letter-spacing:.24em;color:#d7a678;text-transform:uppercase}
+.express-wrap header h2,.scene-ext-wrap header h2,.costume-wrap header h2{font:400 clamp(28px,4.4vw,52px)/1 'Playfair Display';margin:12px 0 4px;color:#f3edd5}
+.express-wrap header p,.scene-ext-wrap header p,.costume-wrap header p{font:13px;color:#a4a497;margin:0 0 18px}
+.express-sheet,.scene-ext-sheet,.costume-sheet{display:block;width:100%;max-width:960px;height:auto;margin:0 auto 22px;border:10px solid #d8cab0;outline:1px solid #8d7a5e;box-shadow:0 18px 44px #000;background:#fff;object-fit:contain}
+.express-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin:0 auto 18px}
+@media(max-width:860px){.express-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:480px){.express-grid{grid-template-columns:repeat(2,1fr)}}
+.express-card{background:linear-gradient(165deg,#1d3a40,#021012);border:1px solid rgba(226,213,182,.28);border-radius:6px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;gap:4px}
+.express-card small{font:8px 'DM Mono';letter-spacing:.16em;color:#d5a982;text-transform:uppercase}
+.express-card b{font:14px 'Noto Serif SC';color:#f3edd5;letter-spacing:.04em;margin-top:2px}
+.express-card i{font-style:normal;font-size:10.5px;color:#9aa393;line-height:1.5;letter-spacing:.04em;text-align:center}
+.scene-ext-list{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:0 auto 20px;max-width:880px}
+@media(max-width:680px){.scene-ext-list{grid-template-columns:1fr}}
+.scene-ext-item{background:linear-gradient(165deg,#1d3a40,#021012);border:1px solid rgba(226,213,182,.28);border-radius:6px;padding:14px 18px;text-align:left;display:flex;flex-direction:column;gap:4px}
+.scene-ext-item .num{font:11px 'DM Mono';letter-spacing:.22em;color:#d5a982}
+.scene-ext-item b{font:18px 'Noto Serif SC';color:#f3edd5;letter-spacing:.04em}
+.scene-ext-item small{font:9px 'DM Mono';letter-spacing:.18em;color:#a4a497;text-transform:uppercase}
+.express-wrap button.close,.scene-ext-wrap button.close,.costume-wrap button.close{background:none;border:1px solid rgba(226,213,182,.55);color:#e7ddc4;font:11px 'DM Mono';letter-spacing:.16em;padding:8px 22px;border-radius:99px;cursor:pointer}
+.express-wrap button.close:hover,.scene-ext-wrap button.close:hover,.costume-wrap button.close:hover{background:#e7dfc3;color:#07100e}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.note-copy{padding:clamp(16px,2.6vw,30px)}.note small{font:10px 'DM Mono';letter-spacing:.2em;color:#d7a678}.note h2{font:400 clamp(30px,4vw,55px)/1 'Playfair Display';margin:15px 0}.note p{line-height:2;font-size:14px;color:#e4dec9;margin:0 auto;max-width:550px}.note button{background:none;border:0;color:#e7ddc4;font:11px 'DM Mono';letter-spacing:.16em;margin-top:16px;cursor:pointer}.note button:after{content:' ×';font-size:16px}
+@media(max-width:680px){.chapters{top:42%}.chapters button{font-size:31px}.chapter-content{top:auto;bottom:15%;left:25px;right:25px;width:auto;transform:none}.chapter-content p{display:none}.ting{left:50%;width:clamp(170px,55vw,260px)}.signal{display:none}.mast span{display:none}}
+</style>
+</head><body><main id="app"><div class="grain"></div><header class="mast"><b>听 听 / TINGTING</b><span>深海听觉实验 · 01–04</span><span id="status">等待入海</span></header>
+<section class="screen" id="start"><div class="line"><svg viewBox="0 0 1200 100" preserveAspectRatio="none"><path d="M0 51 C66 51 54 32 104 33 S169 69 221 55 S274 22 328 48 S394 74 438 55 S486 31 534 53 S610 73 667 49 S728 30 771 51 S836 74 884 47 S957 21 1005 48 S1074 72 1200 49"/></svg></div><div class="title"><span class="the">The</span><h1>Symphony<br>of Tides</h1><p>一段由潮声引路的海底漫游</p></div><button class="enter" id="enter">进入海域</button></section>
+<section class="screen" id="dive"><canvas class="sea" id="sea" aria-label="动态海水"></canvas><div class="signal"></div><img class="ting" src="tingting-clean.png" alt="原始听听角色形象"><div class="finds"><button class="find f0" data-find="0" aria-label="收集漂流瓶"><i class="bottle-icon"></i></button><button class="find f1" data-find="1" aria-label="收集贝壳" hidden><i class="shell-icon"></i></button><button class="find f2" data-find="2" aria-label="收集食谱页" hidden><i class="recipe-icon"></i></button><button class="find f3" data-find="3" aria-label="收集旧唱片" hidden><i class="record-icon"></i></button></div><div class="chapters" id="chapters"></div><article class="chapter-content"><small id="num">01 / 04 · ABYSSAL NOTES</small><h2 id="chapterTitle">寻找第一条线索</h2><p id="chapterText">留意海水里微微发亮的物件。只有收集到它们，场景故事才会显现。</p></article><footer class="nav"><span>在海洋中寻找发光线索</span><div id="bars"></div><span id="counter">00—04</span></footer></section>
+<section class="screen" id="artifact"><article class="note"><div class="diorama" data-angle="0"><span class="hint">点击下方按钮 · 转动听听的小世界</span><div class="scene-stage"><img class="diorama-face" id="scene" alt="线索场景图"></div><div class="diorama-shadow"></div></div><div class="angles" id="angles"><button data-angle="0" class="on">FRONT</button><button data-angle="1">SIDE</button><button data-angle="2">TOP</button></div><div class="note-copy"><small id="foundLabel">TIDAL TRACE</small><h2 id="foundTitle"></h2><p id="foundStory"></p><button id="close">返回海流</button></div></article></section>
+<aside class="modules" id="modules"><button class="lab-btn" id="openSceneExt" title="小场景延展">小<br>场景</button><button class="lab-btn" id="openCostume" title="换装延展">换装<br>模块</button><button class="lab-btn" id="openExpress" title="表情延展">表情<br>实验</button></aside>
+<section class="screen" id="expressPop"><article class="express-wrap"><header><small>EXPRESSION EXTENSION · 表情延展</small><h2>听听的表情实验室</h2><p>收集完潮汐的 4 个场景后解锁的 6 种情绪姿态</p></header><img class="express-sheet" src="expression-sheet.jpg" alt="听听 6 种表情图鉴"><div class="express-grid" id="expressGrid"></div><button class="close" id="closeExpress">回到海流</button></article></section>
+<section class="screen" id="sceneExtPop"><article class="scene-ext-wrap"><header><small>MINI-SCENE EXTENSION · 小场景延展</small><h2>听听的四格玻璃柜</h2><p>把 4 个主场景装进拱形展柜 · 一格一种生活方式</p></header><img class="scene-ext-sheet" src="scene-extension.jpg" alt="听听 4 个小场景图鉴"><div class="scene-ext-list" id="sceneExtList"></div><button class="close" id="closeSceneExt">回到海流</button></article></section>
+<section class="screen" id="costumePop"><article class="costume-wrap"><header><small>DRESS-UP EXTENSION · 换装延展</small><h2>听听的换装图鉴</h2><p>收齐 4 个场景后追加解锁 · 6 套 PARTY+SWITCHING 装扮</p></header><img class="costume-sheet" src="costume-sheet.jpg" alt="听听 6 套换装图鉴"><button class="close" id="closeCostume">回到海流</button></article></section>
+</main><script>
+const sections=[
+{n:'01',name:'山顶观星',tag:'MOUNTAIN STARGAZING',text:'从图片中的望远镜、油灯与探险装里，听见听听第一次把目光投向远方的夜空。',artifact:'观星探险场景',story:'听听穿上探险服，带着星图与油灯站在山顶。远方那道月光，像海面反射回来的讯号。',scene:'scene-stargazing.jpg'},
+{n:'02',name:'海景卧室',tag:'OCEAN-VIEW BEDROOM',text:'房间的窗外就是海。水母的蓝光与床头的小海星，组成听听最安静的一段梦。',artifact:'海景卧室场景',story:'这是一间把海放进窗里的卧室：每一次浪光掠过墙面，都是听听收集到的新声音。',scene:'scene-ocean-bedroom.jpg'},
+{n:'03',name:'温馨厨房',tag:'COZY KITCHEN',text:'甜点、食谱与厨房暖灯，是图片里关于“听”的另一种记忆：让人安心的生活声。',artifact:'烘焙厨房场景',story:'听听戴着厨师帽，为海上的朋友做一块草莓蛋糕。打蛋器、烤箱和窗边的风，都是背景音乐。',scene:'scene-cozy-kitchen.jpg'},
+{n:'04',name:'收音机阅读角',tag:'COZY RADIO READING NOOK',text:'唱片旋转、台灯亮起。这个小小角落正好呼应听听“用声音传递情绪”的角色设定。',artifact:'收音机阅读场景',story:'听听靠着扶手椅读书，老唱机播放一段温柔旋律。它把听见的声音，慢慢收进自己的故事里。',scene:'scene-radio-nook.jpg'}];
+let current=0,found=0;const $=s=>document.querySelector(s);function paint(i){current=i;let d=sections[i];$('#chapters').innerHTML=sections.map((x,k)=>`<button class="${k===i?'active':''}" disabled><span>${x.n}</span>${k<found?'已发现 · ':k===found?'正在寻找 · ':'未发现 · '}${x.name}</button>`).join('');$('#bars').innerHTML=sections.map((x,k)=>`<i class="${k<found?'on':''}"></i>`).join('');$('#num').textContent=`${d.n} / 04 · ${d.tag}`;$('#chapterTitle').textContent=i===found?'寻找下一条线索':d.name;$('#chapterText').textContent=i===found?'发光物件会随着海流出现。收集它，完整场景才会解锁。':d.text;$('#counter').textContent=`0${found}—04`}
+function unlock(i){if(i!==found)return;let d=sections[i];paint(i);$('#scene').src=d.scene;$('#scene').alt=d.artifact;$('.diorama').dataset.angle='0';document.querySelectorAll('#angles button').forEach(b=>b.classList.toggle('on',+b.dataset.angle===0));$('#foundLabel').textContent=d.tag;$('#foundTitle').textContent=d.artifact;$('#foundStory').textContent=d.story;$('#artifact').classList.add('show');document.querySelector(`[data-find="${i}"]`).hidden=true;found++;$('#status').textContent=`已收集 ${found} / 4`;if(found<4)document.querySelector(`[data-find="${found}"]`).hidden=false;if(found>=4)revealAllModules();paint(Math.min(found,3))}
+paint(0);
+$('#enter').onclick=()=>{$('#start').classList.add('off');$('#dive').style.display='grid';$('#status').textContent='正在寻找 0 / 4';resizeSea()};
+document.querySelectorAll('[data-find]').forEach(x=>x.onclick=()=>unlock(+x.dataset.find));
+$('#close').onclick=()=>$('#artifact').classList.remove('show');
+document.querySelectorAll('#angles button').forEach(b=>b.onclick=()=>{const a=+b.dataset.angle;$('.diorama').dataset.angle=a;document.querySelectorAll('#angles button').forEach(x=>x.classList.toggle('on',x===b))});
+
+// Mini-Scene + Dress-up + Expression Extensions — all unlocked once 4 collected
+const expressions=[
+{name:'生气',en:'ANGRY',note:'眉头皱起 · 脸颊鼓鼓 · 全身冒火'},
+{name:'庆祝',en:'CELEBRATE',note:'嘴角上扬 · 彩纸屑绕圈'},
+{name:'喜欢',en:'LOVE',note:'粉心溢出 · 弯眉害羞'},
+{name:'晕',en:'DAZZLED',note:'双眼打叉 · 头顶冒圈'},
+{name:'无语',en:'SPELLS',note:'阴线挂脸 · 鼓着腮帮'},
+{name:'送花',en:'GIFT',note:'月牙眯眼 · 递出小花朵'}];
+
+const miniScenes=[
+{n:'01',name:'古典音乐家',en:'MUSICIAN',note:'拱形展柜里的钢琴与乐谱'},
+{n:'02',name:'童话风卧室',en:'FAIRY-TALE BEDROOM',note:'公主床与小夜灯'},
+{n:'03',name:'天文观测者',en:'ASTRONOMER',note:'望远镜与星象图'},
+{n:'04',name:'可爱面包师',en:'CUTE BAKER',note:'拱形橱窗里的面包与烘焙台'}];
+
+function revealAllModules(){document.getElementById('modules').classList.add('on')}
+function renderExpressions(){document.getElementById('expressGrid').innerHTML=expressions.map(e=>`<article class="express-card"><b>${e.name}</b><small>${e.en}</small><i>${e.note}</i></article>`).join('')}
+function renderMiniScenes(){document.getElementById('sceneExtList').innerHTML=miniScenes.map(s=>`<article class="scene-ext-item"><span class="num">${s.n}</span><b>${s.name}</b><small>${s.en}</small><i>${s.note}</i></article>`).join('')}
+renderExpressions();
+renderMiniScenes();
+document.getElementById('openExpress').onclick=()=>document.getElementById('expressPop').classList.add('show');
+document.getElementById('closeExpress').onclick=()=>document.getElementById('expressPop').classList.remove('show');
+document.getElementById('openSceneExt').onclick=()=>document.getElementById('sceneExtPop').classList.add('show');
+document.getElementById('closeSceneExt').onclick=()=>document.getElementById('sceneExtPop').classList.remove('show');
+document.getElementById('openCostume').onclick=()=>document.getElementById('costumePop').classList.add('show');
+document.getElementById('closeCostume').onclick=()=>document.getElementById('costumePop').classList.remove('show');
+const sea=$('#sea'),ctx=sea.getContext('2d');let W,H;function resizeSea(){W=sea.width=innerWidth*devicePixelRatio;H=sea.height=innerHeight*devicePixelRatio;sea.style.width=innerWidth+'px';sea.style.height=innerHeight+'px';ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0)}function water(t){if(!W)return;let w=innerWidth,h=innerHeight;let g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'#0d7289');g.addColorStop(.33,'#064862');g.addColorStop(1,'#01131e');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);for(let n=0;n<13;n++){ctx.beginPath();for(let x=-30;x<w+40;x+=12){let y=h*(.16+n*.065)+Math.sin(x*.012+t*.00065+n)*10+Math.sin(x*.024-t*.00032+n)*5;x===-30?ctx.moveTo(x,y):ctx.lineTo(x,y)}ctx.strokeStyle=`rgba(180,244,238,${.025+(n%3)*.012})`;ctx.lineWidth=1.5;ctx.stroke()}for(let k=0;k<38;k++){let x=(k*157+t*.018*(k%4+1))%(w+80)-40,y=(Math.sin(k*7.1+t*.0004)*.5+.5)*h,r=2+(k%5);ctx.beginPath();ctx.arc(x,y,r,0,7);ctx.strokeStyle='rgba(204,255,247,.16)';ctx.stroke()}requestAnimationFrame(water)}addEventListener('resize',resizeSea);requestAnimationFrame(water);
+</script></body></html>
